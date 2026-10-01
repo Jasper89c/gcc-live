@@ -1,0 +1,3 @@
+node_modules/
+# Assembled at deploy time from the data branch; never committed to main.
+docs/data/

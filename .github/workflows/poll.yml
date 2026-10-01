@@ -1,0 +1,79 @@
+# The recorder. Every run polls the game's API, adds the results to the recorded data and
+# republishes the site (the built page from main + the data files).
+#
+# The data lives on the `data` branch as a single commit that is replaced on every run, so
+# the repository doesn't grow with each poll. It is both what the pages read and the
+# recorder's memory (7-day price and empire history, battle tallies).
+name: Record and publish
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # GitHub starts scheduled runs late when it is busy
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write    # replace the data branch
+  pages: write       # publish the site
+  id-token: write
+
+# One run at a time: two overlapping runs would each start from the same recorded data and
+# the second would overwrite the first's poll.
+concurrency:
+  group: record-and-publish
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Restore the recorded data
+        run: |
+          mkdir data
+          # No data branch yet means this is the first run. Any other failure stops the job
+          # here, so a network blip can never be mistaken for "no history" and wipe it.
+          if git ls-remote --exit-code --heads origin data > /dev/null; then
+            git fetch --depth=1 origin data
+            git archive FETCH_HEAD | tar -x -C data
+          fi
+
+      - name: Poll the game API
+        env:
+          GCC_API_KEY: ${{ secrets.GCC_API_KEY }}
+        run: node scripts/poll.mjs data
+
+      - name: Save the recorded data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd data
+          git init --quiet --initial-branch=data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git commit --quiet --message "Recorded data as of $(date --utc +%Y-%m-%dT%H:%MZ)"
+          git push --force --quiet "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" data
+          rm -rf .git
+
+      - name: Assemble the site
+        run: |
+          mkdir -p site/data
+          cp docs/index.html site/
+          cp data/*.json site/data/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

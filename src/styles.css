@@ -1,0 +1,452 @@
+/* The subset of the GCR site's styles.css that these pages use (default theme). */
+
+:root {
+  --bg: #070b16;
+  --bg-2: #0d1426;
+  --panel: #111a30;
+  --panel-2: #16223e;
+  --border: #243152;
+  --text: #e6ecf7;
+  --text-dim: #8fa0c0;
+  --accent: #4da3ff;
+  --accent-2: #7c5cff;
+  --pos: #4ade80;
+  --neg: #f87171;
+  --warn: #fb923c;
+  --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* elevation: layered shadows for depth on an otherwise flat dark theme */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Source Sans 3", system-ui, -apple-system, sans-serif;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.btn {
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  padding: 6px 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease, transform 0.1s ease;
+  font-size: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.1);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: none;
+  filter: brightness(0.95);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.btn-sm {
+  padding: 3px 7px;
+  font-size: 13px;
+}
+
+.btn-primary {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-ghost {
+  background: transparent;
+  box-shadow: none;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  box-shadow: none;
+  filter: none;
+}
+
+.error {
+  background: rgba(248, 113, 113, 0.12);
+  border: 1px solid rgba(248, 113, 113, 0.4);
+  color: #fecaca;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 17px;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.toolsbar {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+.toolsbar__brand {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.toolsbar__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.toolsbar__link {
+  padding: 5px 9px;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.toolsbar__link:hover {
+  color: var(--text);
+  background: var(--panel-2);
+}
+
+.toolsbar__link.is-active {
+  color: var(--accent);
+  background: var(--panel-2);
+}
+
+.topbar-brand {
+  font-family: "Exo 2", sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.content > * {
+  min-width: 0;
+}
+
+.content--wide {
+  max-width: 1500px;
+}
+
+.page-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.page-head h1 {
+  margin: 0;
+  font-family: "Exo 2", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 16px 18px;
+  max-width: 100%;
+  overflow-x: auto;
+  /* Per spec, a browser can't leave overflow-y "visible" while overflow-x is
+     "auto" — it silently treats both as auto, so any panel that's even 1px
+     taller than its box (rounding, borders) gets a stray vertical scrollbar.
+     Panels never need to scroll vertically, only wide tables scroll sideways. */
+  overflow-y: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.hint {
+  color: var(--text-dim);
+  font-size: 13px;
+  margin: -4px 0 10px;
+}
+
+.colony-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.colony-table th {
+  text-align: left;
+  color: var(--text-dim);
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.colony-table thead tr {
+  --thead-tint: color-mix(in srgb, color-mix(in srgb, var(--accent) 16%, var(--panel-2)) 80%, black 20%);
+  /* Fades out within the first ~60px — short enough to stay clear of any sticky
+     header cell (e.g. .col-name-th), which can't track a moving gradient and has
+     to fall back to a flat color; keeping the fade that short means the flat
+     panel-2 it falls back to already matches what the gradient settles into. */
+  background: linear-gradient(90deg, var(--thead-tint) 0%, var(--panel-2) 60px);
+}
+
+.colony-table thead th {
+  color: var(--accent);
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.colony-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(36, 49, 82, 0.5);
+  transition: background-color 0.1s ease;
+}
+
+.colony-table tbody tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.colony-table tr:hover td {
+  background: var(--panel-2);
+}
+
+.loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: var(--text-dim);
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    flex-wrap: wrap;
+  }
+}
+
+.race-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 11px;
+  margin-bottom: 16px;
+}
+
+.race-summary__card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  align-items: center;
+  text-align: center;
+}
+
+.race-summary__label {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.race-summary__value {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.market-table .num { text-align: right; font-family: var(--mono); }
+
+.market-change { white-space: nowrap; }
+
+.market-change--pos { color: var(--pos); }
+
+.market-change--neg { color: var(--neg); }
+
+.market-change--flat { color: var(--text-dim); }
+
+.market-watch-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 10px 0; }
+
+.market-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.market-chart-card__title {
+  font-family: "Exo 2", sans-serif;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.market-chart-empty { margin: 20px 0; text-align: center; }
+
+.market-chart { width: 100%; height: auto; display: block; }
+
+.market-chart__grid { stroke: var(--border); stroke-width: 1; }
+
+.market-chart__ytick { fill: var(--text-dim); font-size: 10px; }
+
+.market-chart__xtick { fill: var(--text-dim); font-size: 10px; }
+
+.market-chart__band { fill: var(--accent); fill-opacity: 0.12; stroke: none; }
+
+.market-chart__line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+
+.market-chart__crosshair { stroke: var(--text-dim); stroke-width: 1; }
+
+.market-chart__dot { fill: var(--accent); stroke: var(--panel); stroke-width: 2; }
+
+.market-chart__endlabel { fill: var(--text); font-size: 11px; font-family: var(--mono); }
+
+.market-chart__readout {
+  font-size: 12px;
+  min-height: 16px;
+  margin-top: 2px;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.market-chart__readout-key {
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  background: var(--accent);
+  margin-right: 2px;
+}
+
+.market-chart__readout-date { margin-left: auto; }
+
+.market-chart__table-toggle { margin-top: 6px; font-size: 12px; }
+
+.market-chart__table-toggle summary { cursor: pointer; color: var(--text-dim); }
+
+.market-chart__table-toggle .table-scroll { margin-top: 6px; max-height: 220px; overflow-y: auto; }
+
+.sparkline { display: block; }
+
+.sparkline__line { fill: none; stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
+
+.sparkline__line--pos { stroke: var(--pos); }
+
+.sparkline__line--neg { stroke: var(--neg); }
+
+.trend-charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+.trend-chart-card__title {
+  font-family: "Exo 2", sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.trend-chart-empty { margin: 20px 0; text-align: center; }
+
+.trend-chart { width: 100%; height: auto; display: block; }
+
+.trend-chart__grid { stroke: var(--border); stroke-width: 1; }
+
+.trend-chart__ytick { fill: var(--text-dim); font-size: 10px; }
+
+.trend-chart__xtick { fill: var(--text-dim); font-size: 10px; }
+
+.trend-chart__line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+
+.trend-chart__crosshair { stroke: var(--text-dim); stroke-width: 1; }
+
+.trend-chart__dot { fill: var(--accent); stroke: var(--panel); stroke-width: 2; }
+
+.trend-chart__readout { font-size: 12px; min-height: 16px; margin-top: 2px; display: flex; align-items: baseline; gap: 6px; }
+
+.trend-chart__readout-date { margin-left: auto; }
+
+.empire-row { cursor: pointer; }
+
+.empire-row:hover { background: var(--panel-2); }
+
+.power-jump { white-space: nowrap; }
+
+.power-jump--pos { color: var(--pos); }
+
+.power-jump--neg { color: var(--neg); }
+
+.power-jumps-section { margin-top: 16px; }
+
+.badge-dp {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(77, 163, 255, 0.15);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.empire-detail-panel { padding: 12px 14px; }
+
+.empire-detail-panel__title { font-weight: 600; margin-bottom: 8px; }
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+@media (max-width: 640px) {
+  .content {
+    padding: 10px;
+    gap: 10px;
+  }
+  .page-head {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
