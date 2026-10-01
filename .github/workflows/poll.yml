@@ -8,7 +8,9 @@ name: Record and publish
 
 on:
   schedule:
-    - cron: "*/15 * * * *"   # GitHub starts scheduled runs late when it is busy
+    # Every 15 minutes, off the quarter-hour: GitHub delays or drops scheduled runs when it
+    # is busy, and :00/:15/:30/:45 are the busiest minutes.
+    - cron: "7,22,37,52 * * * *"
   push:
     branches: [main]
   workflow_dispatch:
