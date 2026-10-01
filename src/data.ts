@@ -10,7 +10,8 @@ export class DataError extends Error {}
 async function load<T>(name: string): Promise<T> {
   let resp: Response;
   try {
-    // The timestamp sidesteps the CDN's and the browser's caches, so Refresh really refetches.
+    // The timestamp keeps the browser from reusing its own copy for the 10 minutes GitHub
+    // Pages allows. (Pages' CDN ignores it, and catches up about a minute after each recording.)
     resp = await fetch(`data/${name}?t=${Date.now()}`);
   } catch {
     throw new DataError("Couldn't reach the recorded data — check your connection and try again.");
